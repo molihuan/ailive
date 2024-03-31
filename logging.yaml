@@ -1,0 +1,23 @@
+version: 1
+formatters:
+  fileFormatter:
+    format: '%(asctime)s f %(pathname)s[line:%(lineno)d] - %(levelname)s - %(message)s'
+  consoleFormatter:
+    format: '%(asctime)s c %(pathname)s[line:%(lineno)d] - %(levelname)s - %(message)s'
+handlers:
+  fileHandler:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: fileFormatter
+    filename: './logs/{date}.log'
+    mode: a
+    encoding: UTF-8
+  consoleHandler:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: consoleFormatter
+    stream: ext://sys.stdout
+loggers:
+  root:
+    level: DEBUG
+    handlers: [fileHandler, consoleHandler]
