@@ -1,5 +1,6 @@
 import asyncio
 import json
+import threading
 
 import websockets
 
@@ -14,8 +15,12 @@ class DouyinDanmaku(BaseDanmaku):
     def init(self):
         pass
 
+    def getDanmakuThread(self):
+        asyncio.run(self.danmakuWebsocket())
+
     def startGetDanmaku(self):
-        asyncio.run(self.websocket_client())
+        websocket_thread = threading.Thread(target=self.getDanmakuThread)
+        websocket_thread.start()
         pass
 
     def stopGetDanmaku(self):
@@ -53,8 +58,6 @@ class DouyinDanmaku(BaseDanmaku):
                 #
                 # my_handle.process_data(data, "comment")
 
-
-
                 pass
 
             elif type == MsgType.LIKE.value:
@@ -91,7 +94,6 @@ class DouyinDanmaku(BaseDanmaku):
                 #     "platform": platform,
                 #     "username": username
                 # }
-
                 # my_handle.process_data(data, "follow")
 
                 pass
@@ -146,13 +148,13 @@ class DouyinDanmaku(BaseDanmaku):
 
     async def on_close(self):
         # 处理连接关闭
-        LogUtils.d("WebSocket connection closed")
+        LogUtils.d("danmakuWebsocket 关闭")
 
     async def on_open(self):
         # 处理连接建立
-        LogUtils.d("WebSocket connection established")
+        LogUtils.d("danmakuWebsocket 连接")
 
-    async def websocket_client(self):
+    async def danmakuWebsocket(self):
         uri = "ws://127.0.0.1:8888"
         async with websockets.connect(uri, ping_interval=None) as websocket:
             await self.on_open()

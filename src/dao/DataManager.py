@@ -2,10 +2,11 @@ from flet import Page
 
 from src.models.configs.ConfigsModel import ConfigsModel, LivePlatform
 
+
 # 数据管理者
 class DataManager():
     page: Page = None
-    configs = None
+    configs: ConfigsModel = None
 
     @staticmethod
     def setPage(page: Page):
@@ -28,6 +29,3 @@ class DataManager():
     def getConfigs():
         value = DataManager.page.client_storage.get("MLH_Configs")
         return value
-
-
-

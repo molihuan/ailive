@@ -57,28 +57,28 @@ class PygameAudioPlayer(BaseAudioPlayer):
         return self.audioPlayer.get_pos()/1000
 
 
-if __name__ == '__main__':
-
-    t1 = r"E:\DesktopSpace\Development\Python\ailive\assets\t1.mp3"
-    t2 = r"E:\DesktopSpace\Development\Python\ailive\assets\t2.mp3"
-
-    player=PygameAudioPlayer()
-
-
-    thread1 = threading.Thread(target=player.play, args=(t1,))
-    thread1.start()
-
-    time.sleep(5)
-    savePos=player.getProgress()
-    print(savePos)
-
-    thread2 = threading.Thread(target=player.play, args=(t2,))
-    thread2.start()
-
-    time.sleep(5)
-
-    thread1 = threading.Thread(target=player.play, args=(t1,savePos))
-    thread1.start()
-
-    # time.sleep(13)
-    thread1.join()
+# if __name__ == '__main__':
+#
+#     t1 = r"E:\DesktopSpace\Development\Python\ailive\assets\t1.mp3"
+#     t2 = r"E:\DesktopSpace\Development\Python\ailive\assets\t2.mp3"
+#
+#     player=PygameAudioPlayer()
+#
+#
+#     thread1 = threading.Thread(target=player.play, args=(t1,))
+#     thread1.start()
+#
+#     time.sleep(5)
+#     savePos=player.getProgress()
+#     print(savePos)
+#
+#     thread2 = threading.Thread(target=player.play, args=(t2,))
+#     thread2.start()
+#
+#     time.sleep(5)
+#
+#     thread1 = threading.Thread(target=player.play, args=(t1,savePos))
+#     thread1.start()
+#
+#     # time.sleep(13)
+#     thread1.join()

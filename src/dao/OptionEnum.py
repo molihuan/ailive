@@ -1,6 +1,6 @@
 from enum import Enum
 
-
+# 选项枚举类
 class MsgType(Enum):
     # 弹幕
     DANMAKU = 1
