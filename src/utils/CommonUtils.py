@@ -1,7 +1,6 @@
 from queue import Queue
 from typing import List
 
-
 from flet_core import MainAxisAlignment, Control, Text, Page, SnackBar, TextButton, AlertDialog, BottomSheet, Container, \
     Column
 
@@ -10,11 +9,11 @@ class CommonUtils():
     page: Page = None
 
     @classmethod
-    def init(cls,page: Page):
+    def init(cls, page: Page):
         CommonUtils.page = page
 
     @classmethod
-    def showSnack(cls,text: str, actionText='提示'):
+    def showSnack(cls, text: str, actionText='提示'):
         if cls.page.snack_bar is None:
             cls.page.snack_bar = SnackBar(
                 content=Text("Hello, world!"),
@@ -34,7 +33,7 @@ class CommonUtils():
 
         if actions is None:
             actions = [
-                TextButton("确定", on_click=lambda p: CommonUtils.closeAlertDialog( cls.page.dialog)),
+                TextButton("确定", on_click=lambda p: CommonUtils.closeAlertDialog(cls.page.dialog)),
             ]
 
         cls.page.dialog = AlertDialog(
@@ -49,7 +48,7 @@ class CommonUtils():
         cls.page.update()
 
     @classmethod
-    def closeAlertDialog(cls,dialog: AlertDialog):
+    def closeAlertDialog(cls, dialog: AlertDialog):
         dialog.open = False
         cls.page.update()
 
@@ -78,7 +77,11 @@ class CommonUtils():
         cls.page.update()
 
     @staticmethod
-    def clearQueue(queue:Queue):
+    def clearQueue(queue: Queue):
         while not queue.empty():
             queue.get()
 
+    @staticmethod
+    def clearQueueOneLeft(queue: Queue):
+        while not (queue.qsize() <= 1):
+            queue.get()

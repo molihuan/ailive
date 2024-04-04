@@ -8,24 +8,38 @@ class DataManager():
     page: Page = None
     configs: ConfigsModel = None
 
-    @staticmethod
-    def setPage(page: Page):
-        DataManager.page = page
+    @classmethod
+    def setPage(cls, page: Page):
+        cls.page = page
 
     @classmethod
     def init(cls):
         cls.configs = cls.getConfigs()
         if cls.configs is None:
             cls.configs = ConfigsModel()
-            cls.configs.livePlatform = LivePlatform.DOUYIN
             cls.setConfigs(cls.configs)
-            pass
 
-    @staticmethod
-    def setConfigs(value):
-        return DataManager.page.client_storage.set("MLH_Configs", value)
+    @classmethod
+    def remove(cls, key):
+        cls.page.client_storage.remove(key)
 
-    @staticmethod
-    def getConfigs():
-        value = DataManager.page.client_storage.get("MLH_Configs")
+    @classmethod
+    def resetConfigs(cls):
+        cls.remove("MLH_AiLive_Configs")
+        cls.init()
+
+    @classmethod
+    def saveConfigs(cls):
+        return cls.page.client_storage.set("MLH_AiLive_Configs", cls.configs)
+
+    @classmethod
+    def setConfigs(cls, value: ConfigsModel):
+        return cls.page.client_storage.set("MLH_AiLive_Configs", value)
+
+    @classmethod
+    def getConfigs(cls):
+        value = cls.page.client_storage.get("MLH_AiLive_Configs")
+        if value:
+            # 重新转换为对象
+            value = ConfigsModel(**value)
         return value

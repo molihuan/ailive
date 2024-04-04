@@ -1,6 +1,5 @@
 import asyncio
 import json
-import threading
 
 import websockets
 
@@ -9,6 +8,7 @@ from src.service.ServiceManager import ServiceManager
 from src.service.danmaku.BaseDanmaku import BaseDanmaku
 from src.service.llm.BaseLLM import AskQueueItem
 from src.utils.LogUtils import LogUtils
+from src.utils.ThreadUtils import SuperThread
 
 
 class DouyinDanmaku(BaseDanmaku):
@@ -19,14 +19,14 @@ class DouyinDanmaku(BaseDanmaku):
         asyncio.run(self.danmakuWebsocket())
 
     def startGetDanmaku(self):
-        websocket_thread = threading.Thread(target=self.getDanmakuThread)
-        websocket_thread.start()
+        danmakuWebsocketThread = SuperThread(target=self.getDanmakuThread)
+        danmakuWebsocketThread.start()
         pass
 
     def stopGetDanmaku(self):
         pass
 
-    async def on_message(self,ws, message):
+    async def on_message(self, ws, message):
         # global last_liveroom_data, last_username_list, config, config_path
         # global global_idle_time
 
@@ -142,7 +142,7 @@ class DouyinDanmaku(BaseDanmaku):
 
                 pass
 
-    async def on_error(self,error):
+    async def on_error(self, error):
         # 处理错误
         LogUtils.e(f"Error: {error}")
 

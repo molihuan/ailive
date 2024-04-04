@@ -1,9 +1,10 @@
-import threading
 import time
 from queue import Queue
 
 import pygame
 
+from src.dao.OptionEnum import MsgType
+from src.service.idle.IdleTaskManager import IdleTaskManager
 from src.service.player.BaseAudioPlayer import BaseAudioPlayer
 
 # pygame播放器
@@ -15,47 +16,64 @@ class PygameAudioPlayer(BaseAudioPlayer):
 
     def init(self):
         self.mixer = pygame.mixer
-        self.mixer.init()# 初始化音频模块
+        self.mixer.init()  # 初始化音频模块
         self.audioPlayer = self.mixer.music
+        # 已经播放的进度
+        self.alreadyPlayPos = 0.0
+        # 闲时任务数据列表的索引
+        self.idleDataListIndex = -1
 
+    def getIdleDataListIndex(self):
+        return self.idleDataListIndex
 
     # 播放
-    def play(self,file_path:str, start=0,loops=0, fade_ms=0):
+    def play(self, file_path: str, msgType=None, start=0.0, loops=0, fade_ms=0):
+        self.alreadyPlayPos = start
         self.audioPlayer.load(file_path)
-        self.audioPlayer.play(loops,start,fade_ms)
+        self.audioPlayer.play(loops, start, fade_ms)
         while self.audioPlayer.get_busy():
-            # pygame.time.Clock().tick(10)
-            pass
+            # pygame.time.Clock().tick
+            if msgType == MsgType.DANMAKU:
+                # 重置闲时时间,防止闲时任务提前进入
+                IdleTaskManager.makeGlobalIdleTimeZero()
+            time.sleep(1)
+
     # 播放
-    def playByQueue(self,audioPlayQueue:Queue):
+    def playByQueue(self, audioPlayQueue: Queue):
         while True:
-            audioPlayQueueItem:AudioPlayQueueItem = audioPlayQueue.get()
-            self.play(audioPlayQueueItem.audioPath)
+            audioPlayQueueItem: AudioPlayQueueItem = audioPlayQueue.get()
+            self.idleDataListIndex = audioPlayQueueItem.idleDataListIndex
+            self.play(audioPlayQueueItem.audioPath, audioPlayQueueItem.msgType, start=audioPlayQueueItem.startPlayPos)
             LogUtils.d(f'播放完成:{audioPlayQueueItem.audioPath}')
+            if audioPlayQueueItem.msgType == MsgType.DANMAKU:
+                # 重置闲时时间
+                IdleTaskManager.makeGlobalIdleTimeZero()
+
     # 暂停
     def pause(self):
         self.audioPlayer.pause()
         pass
+
     # 继续
     def resume(self):
         self.audioPlayer.unpause()
         pass
+
     # 停止
     def stop(self):
         self.audioPlayer.stop()
         pass
 
     def replay(self):
-
+        self.audioPlayer.rewind()
         pass
 
-    def setProgress(self,pos):
+    def setProgress(self, pos):
         self.audioPlayer.set_pos(pos)
         pass
 
     def getProgress(self):
-        return self.audioPlayer.get_pos()/1000
-
+        return (self.audioPlayer.get_pos() / 1000) + self.alreadyPlayPos
 
 # if __name__ == '__main__':
 #
