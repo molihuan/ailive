@@ -48,6 +48,9 @@ class BaseTTS():
     def init(self):
         pass
 
+    def getSendRequestTool(self):
+        pass
+
     def text2audio(self, text: str, audio_path: str):
         pass
 

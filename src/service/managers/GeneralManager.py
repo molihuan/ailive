@@ -1,6 +1,7 @@
 from queue import Queue
 
 from src.service.idle.IdleTaskManager import IdleTaskManager
+from src.service.llm.AnythingLLM import AnythingLLM
 from src.service.llm.BaseLLM import BaseLLM
 from src.service.llm.OllamaLLM import OllamaLLM
 from src.service.managers.BaseManager import BaseManager
@@ -20,7 +21,7 @@ class GeneralManager(BaseManager):
     def __init__(self):
         super().__init__()
         # 初始化llm、tts、音频播放器
-        self.llm: BaseLLM = OllamaLLM()
+        self.llm: BaseLLM = AnythingLLM()
         self.tts: BaseTTS = GPTSoVITSTTS()
         self.audioPlayer: BaseAudioPlayer = PygameAudioPlayer()
         self.llm.init()

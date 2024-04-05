@@ -1,7 +1,7 @@
 import uuid
 from queue import Queue
 
-import ollama
+import requests
 
 from src.dao.OptionEnum import MsgType
 from src.service.idle.IdleTaskManager import IdleTaskManager
@@ -12,10 +12,11 @@ from src.utils.LogUtils import LogUtils
 from src.utils.StrUtils import StrUtils
 
 
-class OllamaLLM(BaseLLM):
+class AnythingLLM(BaseLLM):
     def __init__(self):
         super().__init__()
-        self.model = self.configs.llmOllamaModel
+        self.llmAnythingLLMChatAddr = self.configs.llmAnythingLLMChatAddr
+        self.llmAnythingLLMKey = self.configs.llmAnythingLLMKey
 
     def init(self):
 
@@ -24,13 +25,15 @@ class OllamaLLM(BaseLLM):
     def ask(self, content: str):
         LogUtils.d(f'提问:{content}')
         # TODO 进行进行本地问答库回答,获取配置是否需要本地库回答
-        response = ollama.chat(model=self.model, messages=[
-            {
-                'role': 'user',
-                'content': content,
-            },
-        ])
-        answer = response['message']['content']
+        response = requests.post(
+            url=self.llmAnythingLLMChatAddr,
+            headers={"Authorization": "Bearer " + self.llmAnythingLLMKey},
+            json={
+                "message": content,
+                "mode": "chat"
+            })
+        data = response.json()
+        answer = data['textResponse']
         answer = StrUtils.removeSpace(answer)
         LogUtils.d(f'LLM回答:{answer}')
         return answer
@@ -41,7 +44,6 @@ class OllamaLLM(BaseLLM):
             askQueueItem: AskQueueItem = askQueue.get()
             # 获取答案
             answerText = self.ask(askQueueItem.text)
-            # 封装答案
 
             # 设置准备生成音频的路径
             temp_audio_name = str(uuid.uuid4()) + '.wav'

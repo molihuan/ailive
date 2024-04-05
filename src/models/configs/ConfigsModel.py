@@ -40,6 +40,24 @@ class ConfigsModel(BaseModel):
     # ollama配置
     llmOllamaApiAddr: str = 'http://127.0.0.1:11434'
     llmOllamaModel: str = 'qwen:4b-chat'
+    # AnythingLLM配置
+    # 请求头中需要Authorization: Bearer 7HEQ8QN-QEBM5N1-J5QTM7M-PJ9M788
+    llmAnythingLLMApiAddr: str = 'http://127.0.0.1:3001'
+    # 工作区Slug
+    llmAnythingLLMWorkspaceSlug: str = 'ailive'
+    llmAnythingLLMKey: str = '7HEQ8QN-QEBM5N1-J5QTM7M-PJ9M788'
+
+    # curl -X 'POST' \
+    #   'http://localhost:3001/api/v1/workspace/ailive/chat' \
+    #   -H 'accept: application/json' \
+    #   -H 'Authorization: Bearer 7HEQ8QN-QEBM5N1-J5QTM7M-PJ9M788' \
+    #   -H 'Content-Type: application/json' \
+    #   -d '{
+    #   "message": "What is AnythingLLM?",
+    #   "mode": "chat"
+    # }'
+    # chat地址
+    llmAnythingLLMChatAddr: str = f'{llmAnythingLLMApiAddr}/api/v1/workspace/{llmAnythingLLMWorkspaceSlug}/chat'
 
     # TTS配置
     ttsType: TTSType = TTSType.GPT_SOVITS

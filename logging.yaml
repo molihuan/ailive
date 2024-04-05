@@ -1,9 +1,11 @@
 version: 1
 formatters:
   fileFormatter:
-    format: '%(asctime)s f %(pathname)s[line:%(lineno)d] - %(levelname)s - %(message)s'
+    #    format: '%(asctime)s f %(pathname)s[line:%(lineno)d] - %(levelname)s - %(message)s'
+    format: '%(asctime)s - %(levelname)s - %(message)s'
   consoleFormatter:
-    format: '%(asctime)s c %(pathname)s[line:%(lineno)d] - %(levelname)s - %(message)s'
+    #    format: '%(asctime)s c %(pathname)s[line:%(lineno)d] - %(levelname)s - %(message)s'
+    format: '%(asctime)s - %(levelname)s - %(message)s'
 handlers:
   fileHandler:
     class: logging.FileHandler
@@ -20,4 +22,4 @@ handlers:
 loggers:
   root:
     level: DEBUG
-    handlers: [fileHandler, consoleHandler]
+    handlers: [ fileHandler, consoleHandler ]
