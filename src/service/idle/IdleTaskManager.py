@@ -51,7 +51,7 @@ class IdleTaskManager(BaseManager):
                         # 移动到保存的索引位置
                         continue
                     # 队列中不需要添加太多任务,如果超过最大的数就开始等待
-                    if self.judgeStopDoTextIdleTask(audioCompoundQueue, 0, 0):
+                    if self.judgeStopDoTextIdleTask(audioCompoundQueue, 0):
                         break
 
                     # 设置准备生成音频的路径
@@ -75,7 +75,7 @@ class IdleTaskManager(BaseManager):
                 IdleTaskManager.globalIdleTime += 1
 
     # 判断是否需要停止做文本闲时任务
-    def judgeStopDoTextIdleTask(self, queue: Queue, size: int, listIndex):
+    def judgeStopDoTextIdleTask(self, queue: Queue, size: int):
         # 退出的条件是前一个任务已经完成,返回False
         # 还有一种是其他的线程更改了IdleTaskManager.stopDoAudioIdleTaskFlag为True,返回True
         # 队列中不需要添加太多任务,如果超过就开始等待
@@ -121,11 +121,12 @@ class IdleTaskManager(BaseManager):
                         # 移动到保存的索引位置
                         continue
                     # 队列中不需要添加太多任务,如果超过0就开始等待
-                    if self.judgeStopDoAudioIdleTask(audioPlayQueue, 0, index):
+                    if self.judgeStopDoAudioIdleTask(audioPlayQueue, 0):
                         # 有弹幕就直接退出做闲时任务
                         break
 
-                    item = AudioPlayQueueItem(audioPath=idleAudio, msgType=MsgType.IDLE, startPlayPos=self.savePlayPos)
+                    item = AudioPlayQueueItem(audioPath=idleAudio, msgType=MsgType.IDLE, startPlayPos=self.savePlayPos,
+                                              idleDataListIndex=index)
                     LogUtils.e(f'播放队列+,播放起始位置{self.savePlayPos},{idleAudio}')
                     audioPlayQueue.put(item)
                     # 播放位置复位
@@ -136,7 +137,7 @@ class IdleTaskManager(BaseManager):
                 IdleTaskManager.globalIdleTime += 1
 
     # 判断是否需要停止做音频闲时任务
-    def judgeStopDoAudioIdleTask(self, queue: Queue, size: int, listIndex):
+    def judgeStopDoAudioIdleTask(self, queue: Queue, size: int):
         # 退出的条件是前一个任务已经完成,返回False
         # 还有一种是其他的线程更改了IdleTaskManager.stopDoAudioIdleTaskFlag为True,返回True
         # 队列中不需要添加太多任务,如果超过就开始等待
@@ -153,7 +154,7 @@ class IdleTaskManager(BaseManager):
                 player: BaseAudioPlayer = self.generalManager.audioPlayer
                 self.savePlayPos = player.getProgress()
                 print(f'保存播放进度为:{self.savePlayPos}')
-                self.saveListIndex = listIndex
+                self.saveListIndex = player.getIdleDataListIndex()
                 player.stop()
 
                 LogUtils.d(f'停止做闲时任务')

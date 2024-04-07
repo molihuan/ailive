@@ -7,11 +7,11 @@ from src.dao.OptionEnum import MsgType
 from src.service.idle.IdleTaskManager import IdleTaskManager
 from src.service.player.BaseAudioPlayer import BaseAudioPlayer
 
-# pygame播放器
 from src.service.tts.BaseTTS import AudioPlayQueueItem
 from src.utils.LogUtils import LogUtils
 
 
+# pygame播放器
 class PygameAudioPlayer(BaseAudioPlayer):
 
     def init(self):
@@ -28,7 +28,6 @@ class PygameAudioPlayer(BaseAudioPlayer):
 
     # 播放
     def play(self, file_path: str, msgType=None, start=0.0, loops=0, fade_ms=0):
-        self.alreadyPlayPos = start
         self.audioPlayer.load(file_path)
         self.audioPlayer.play(loops, start, fade_ms)
         while self.audioPlayer.get_busy():
@@ -42,12 +41,16 @@ class PygameAudioPlayer(BaseAudioPlayer):
     def playByQueue(self, audioPlayQueue: Queue):
         while True:
             audioPlayQueueItem: AudioPlayQueueItem = audioPlayQueue.get()
+            # 获取闲事任务的索引
             self.idleDataListIndex = audioPlayQueueItem.idleDataListIndex
+            self.alreadyPlayPos = audioPlayQueueItem.startPlayPos
+            # 播放
             self.play(audioPlayQueueItem.audioPath, audioPlayQueueItem.msgType, start=audioPlayQueueItem.startPlayPos)
             LogUtils.d(f'播放完成:{audioPlayQueueItem.audioPath}')
-            if audioPlayQueueItem.msgType == MsgType.DANMAKU:
-                # 重置闲时时间
-                IdleTaskManager.makeGlobalIdleTimeZero()
+            
+            # if audioPlayQueueItem.msgType == MsgType.DANMAKU:
+            #     # 重置闲时时间
+            #     IdleTaskManager.makeGlobalIdleTimeZero()
 
     # 暂停
     def pause(self):
