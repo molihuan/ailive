@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 from src.dao.DataManager import DataManager
 from src.dao.OptionEnum import MsgType
+from src.utils.CommonUtils import CommonUtils
 
 
 class AskQueueItem(BaseModel):
@@ -25,6 +26,18 @@ class BaseLLM():
     def init(self):
         pass
 
+    # 处理回答后的文本
+    def handleAnswerText(self, answerText: str):
+        # 空数据结束
+        if answerText == "" or answerText is None:
+            return None
+        # 去除两端空格
+        answerText = answerText.strip()
+
+        # 是否有链接
+        if CommonUtils.is_url_check(answerText):
+            return None
+        
     def ask(self, content: str):
         pass
 

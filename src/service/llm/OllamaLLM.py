@@ -31,7 +31,6 @@ class OllamaLLM(BaseLLM):
             },
         ])
         answer = response['message']['content']
-        answer = StrUtils.removeSpace(answer)
         LogUtils.d(f'LLM回答:{answer}')
         return answer
 
@@ -41,7 +40,10 @@ class OllamaLLM(BaseLLM):
             askQueueItem: AskQueueItem = askQueue.get()
             # 获取答案
             answerText = self.ask(askQueueItem.text)
-            # 封装答案
+            # 回答文本处理
+            answerText = self.handleAnswerText(answerText)
+            if answerText is None:
+                continue
 
             # 设置准备生成音频的路径
             temp_audio_name = str(uuid.uuid4()) + '.wav'

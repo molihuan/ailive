@@ -168,11 +168,13 @@ class IdleTaskManager(BaseManager):
     def startIdleTaskThread(self):
 
         if self.configs.idleAudioEnable:
-            audioIdleThread = SuperThread(target=self.audioIdleTaskThread)
-            audioIdleThread.start()
+            self.audioIdleThread = SuperThread(target=self.audioIdleTaskThread)
+            self.audioIdleThread.daemon = True
+            self.audioIdleThread.start()
         elif self.configs.idleTextEnable:
-            textIdleThread = SuperThread(target=self.textIdleTaskThread)
-            textIdleThread.start()
+            self.textIdleThread = SuperThread(target=self.textIdleTaskThread)
+            self.textIdleThread.daemon = True
+            self.textIdleThread.start()
         else:
             LogUtils.d(f'闲时任务未开启')
             return
@@ -180,4 +182,12 @@ class IdleTaskManager(BaseManager):
 
     # 停止闲时任务线程
     def stopIdleTaskThread(self):
+        # 有问题
+        self.makeGlobalIdleTimeZero()
+        self.stopDoTextIdleTaskFlag = True
+        self.stopDoAudioIdleTaskFlag = True
+        if self.audioIdleThread:
+            self.audioIdleThread.stop()
+        if self.textIdleThread:
+            self.textIdleThread.stop()
         pass

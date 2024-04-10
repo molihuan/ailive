@@ -17,7 +17,7 @@ class DataManager():
         cls.configs = cls.getConfigs()
         if cls.configs is None:
             cls.configs = ConfigsModel()
-            cls.setConfigs(cls.configs)
+            # cls.setConfigs(cls.configs)
 
     @classmethod
     def remove(cls, key):

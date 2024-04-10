@@ -34,7 +34,7 @@ class AnythingLLM(BaseLLM):
             })
         data = response.json()
         answer = data['textResponse']
-        answer = StrUtils.removeSpace(answer)
+
         LogUtils.d(f'LLM回答:{answer}')
         return answer
 

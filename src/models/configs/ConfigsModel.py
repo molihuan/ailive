@@ -13,8 +13,9 @@ class LivePlatform(Enum):
 # 大语言模型
 class LLMType(Enum):
     # 复读机
-    REPEATER = 1
-    OLLAMA_LLM = 2
+    REPEATER = 'Repeater'
+    OLLAMA_LLM = "Ollama"
+    ANYTHING_LLM = "AnythingLLM"
 
 
 # 文本转语音

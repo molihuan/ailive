@@ -1,5 +1,6 @@
 from queue import Queue
 from typing import List
+from urllib.parse import urlparse
 
 from flet_core import MainAxisAlignment, Control, Text, Page, SnackBar, TextButton, AlertDialog, BottomSheet, Container, \
     Column
@@ -48,8 +49,11 @@ class CommonUtils():
         cls.page.update()
 
     @classmethod
-    def closeAlertDialog(cls, dialog: AlertDialog):
-        dialog.open = False
+    def closeAlertDialog(cls, dialog: AlertDialog = None):
+        if dialog is not None:
+            dialog.open = False
+        else:
+            cls.page.dialog.open = False
         cls.page.update()
 
     @classmethod
@@ -85,3 +89,16 @@ class CommonUtils():
     def clearQueueOneLeft(queue: Queue):
         while not (queue.qsize() <= 1):
             queue.get()
+
+    # 是否是链接检测
+    @staticmethod
+    def is_url_check(text):
+        parsed_url = urlparse(text)
+        return all([parsed_url.scheme, parsed_url.netloc])
+
+        # url_pattern = re.compile(r'(?i)((?:(?:https?|ftp):\/\/)?[^\s/$.?#]+\.[^\s>]+)')
+
+        # if url_pattern.search(text):
+        #     return True
+        # else:
+        #     return False

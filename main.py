@@ -9,7 +9,7 @@ from src.utils.LogUtils import LogUtils
 
 
 def fletApp(page: Page):
-    page.title = "无人直播"
+    page.title = " "
     page.horizontal_alignment = CrossAxisAlignment.CENTER
 
     # 日志工具初始化
@@ -22,7 +22,7 @@ def fletApp(page: Page):
     # 通用工具初始化
     CommonUtils.init(page)
     # 业务管理者初始化
-    ServiceManager.init()
+    ServiceManager.init(page)
 
     # 路由配置
     appRoutes = AppRoutes(page)

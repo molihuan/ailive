@@ -38,7 +38,7 @@ class AppRoutes():
                 appbar=AppBar(
                     # leading=ft.Image(src=f"/imgs/ml.png"),
                     # leading_width=40,
-                    title=Text(f"无人直播工具"),
+                    title=Text(f" "),
                     center_title=False,
                     bgcolor=colors.SURFACE_VARIANT,
                     actions=[
