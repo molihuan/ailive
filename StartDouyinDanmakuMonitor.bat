@@ -1,2 +1,1 @@
-@echo off
-start "" "WssBarrageService.exe"
+ExternalPlugins\DouyinDanmakuMonitor_V2.7.0\WssBarrageService.exe

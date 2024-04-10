@@ -21,7 +21,7 @@ class GeneralManager(BaseManager):
     def __init__(self):
         super().__init__()
         # 初始化llm、tts、音频播放器
-        self.llm: BaseLLM = OllamaLLM()
+        self.llm: BaseLLM = AnythingLLM()
         self.tts: BaseTTS = GPTSoVITSTTS()
         self.audioPlayer: BaseAudioPlayer = PygameAudioPlayer()
         self.llm.init()

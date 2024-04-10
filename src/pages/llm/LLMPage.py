@@ -6,8 +6,10 @@ from src.models.configs.ConfigsModel import LLMType
 from src.pages.BasePage import BasePage
 from src.utils.CommonUtils import CommonUtils
 
-
 # 大语言设置页面
+from src.utils.LogUtils import LogUtils
+
+
 class LLMPage(BasePage):
     def __init__(self, parent: Page):
         super().__init__()
@@ -57,13 +59,13 @@ class LLMPage(BasePage):
         view = e.control
         if view == self.btn_save.current:
             self.configs.llmType = LLMType(self.dd_select_llm_type.current.value)
-            self.configs.llmOllamaApiAddr = self.tf_llmOllamaApiAddr.current.value
-            self.configs.llmOllamaModel = self.tf_llmOllamaModel.current.value
+            self.configs.llmOllamaApiAddr = self.tf_llmOllamaApiAddr.current.value.strip()
+            self.configs.llmOllamaModel = self.tf_llmOllamaModel.current.value.strip()
 
-            self.configs.llmAnythingLLMKey = self.tf_llmAnythingLLMKey.current.value
-            self.configs.llmAnythingLLMApiAddr = self.tf_llmAnythingLLMApiAddr.current.value
-            self.configs.llmAnythingLLMWorkspaceSlug = self.tf_llmAnythingLLMWorkspaceSlug.current.value
-
+            self.configs.llmAnythingLLMKey = self.tf_llmAnythingLLMKey.current.value.strip()
+            self.configs.llmAnythingLLMApiAddr = self.tf_llmAnythingLLMApiAddr.current.value.strip()
+            self.configs.llmAnythingLLMWorkspaceSlug = self.tf_llmAnythingLLMWorkspaceSlug.current.value.strip()
+            LogUtils.d(self.configs)
             if DataManager.saveConfigs():
                 CommonUtils.showSnack("保存成功")
             else:

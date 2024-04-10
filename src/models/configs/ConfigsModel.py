@@ -6,8 +6,8 @@ from pydantic import BaseModel
 
 # 直播平台
 class LivePlatform(Enum):
-    BILIBILI = 1
-    DOUYIN = 2
+    BILIBILI = 'Bilibili'
+    DOUYIN = '抖音'
 
 
 # 大语言模型
@@ -20,7 +20,7 @@ class LLMType(Enum):
 
 # 文本转语音
 class TTSType(Enum):
-    GPT_SOVITS = 1
+    GPT_SOVITS = 'GPT_SoVITS'
 
 
 # 闲时任务

@@ -14,6 +14,7 @@ class DataManager():
 
     @classmethod
     def init(cls):
+        # DataManager.resetConfigs()
         cls.configs = cls.getConfigs()
         if cls.configs is None:
             cls.configs = ConfigsModel()
