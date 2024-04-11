@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 
 class StrUtils:
@@ -30,7 +31,7 @@ class StrUtils:
         return '\n'.join(string_list)
 
     @staticmethod
-    def str2strList(text):
+    def str2strList(text) -> List[str]:
         """
         将包含换行符的字符串拆分成一个字符串列表。
 
@@ -40,4 +41,5 @@ class StrUtils:
         返回：
             list[str]: 拆分后的字符串列表。
         """
-        return text.split('\n')
+        lines = [line.strip() for line in text.split("\n")]
+        return lines

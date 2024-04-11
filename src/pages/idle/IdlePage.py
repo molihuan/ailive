@@ -1,9 +1,13 @@
+import os
+
 from flet_core import Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, alignment, \
     Ref, ControlEvent, Switch, TextField, Row, Text
 
 from src.dao.DataManager import DataManager
 from src.pages.BasePage import BasePage
+from src.service.tts.GPTSoVITSTTS import GPTSoVITSTTS
 from src.utils.CommonUtils import CommonUtils
+from src.utils.FileUtils import FileUtils
 from src.utils.StrUtils import StrUtils
 
 
@@ -61,6 +65,23 @@ class IdlePage(BasePage):
             else:
                 CommonUtils.showSnack("保存失败")
 
+    def idleText2Audio(self):
+        tf_raw = self.idleTextTF.current.value
+        textList = StrUtils.str2strList(tf_raw)
+        useful_path = FileUtils.getTempUsefulPath()
+        vitstts = GPTSoVITSTTS()
+        audioPathList = []
+        for index, text in enumerate(textList):
+            if StrUtils.removeSpace(text).isspace():
+                continue
+            audioPath = os.path.join(useful_path, str(index) + ".wav")
+            vitstts.text2audio(text, audioPath)
+            audioPathList.append(audioPath)
+        result = StrUtils.strList2str(audioPathList)
+        print(result)
+        self.idleAudioTF.current.value = result
+        self.idleAudioTF.current.update()
+
     def build(self):
         return Container(
             content=Column([
@@ -86,6 +107,7 @@ class IdlePage(BasePage):
                     min_lines=5,
                     max_lines=10,
                 ),
+                ElevatedButton(text='转换', on_click=lambda e: self.idleText2Audio()),
                 Switch(ref=self.idleAudioSwitch, label="闲时音频模式", on_change=self.switch_change,
                        value=self.configs.idleAudioEnable),
                 TextField(
