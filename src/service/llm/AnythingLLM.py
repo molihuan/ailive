@@ -23,6 +23,7 @@ class AnythingLLM(BaseLLM):
         pass
 
     def ask(self, content: str):
+        content = content + ",用一句简短的话回答我,只能用一句话"
         LogUtils.d(f'提问:{content}')
         # TODO 进行进行本地问答库回答,获取配置是否需要本地库回答
         response = requests.post(
@@ -30,11 +31,11 @@ class AnythingLLM(BaseLLM):
             headers={"Authorization": "Bearer " + self.llmAnythingLLMKey},
             json={
                 "message": content,
-                "mode": "chat"
+                "mode": "query"
             })
         data = response.json()
-        answer = data['textResponse']
-
+        answer: str = data['textResponse']
+        answer = answer.strip()
         LogUtils.d(f'LLM回答:{answer}')
         return answer
 
