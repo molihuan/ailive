@@ -2,11 +2,14 @@ class BaseDanmaku():
     def init(self):
         pass
 
-    def getDanmakuThread(self):
+    def getDanmakuTask(self):
         pass
 
-    def startGetDanmaku(self):
+    def stopGetDanmakuTask(self):
         pass
 
-    def stopGetDanmaku(self):
+    def startGetDanmakuThread(self):
+        pass
+
+    def stopGetDanmakuThread(self):
         pass

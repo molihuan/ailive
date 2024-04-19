@@ -4,7 +4,9 @@ from flet_core import UserControl, Page, Container, Column, ElevatedButton, Scro
 from src.pages.BasePage import BasePage
 from src.pages.route.RouteUrl import RouteUrl
 from src.service.ServiceManager import ServiceManager
-from src.service.danmaku.DouyinDanmaku import DouyinDanmaku
+from src.service.danmaku.BaseDanmaku import BaseDanmaku
+from src.service.danmaku.DouyinBarrageGrabDK import DouyinBarrageGrabDK
+from src.service.danmaku.DouyinLiveWebFetcherDK import DouyinLiveWebFetcherDK
 from src.service.llm.BaseLLM import AskQueueItem
 
 
@@ -13,6 +15,8 @@ class HomePage(BasePage):
         super().__init__()
         self.parent = parent
         self.askTF = Ref[TextField]()
+
+        self.douyinDanmaku: BaseDanmaku = DouyinLiveWebFetcherDK("573356835582")
 
     def initData(self):
         pass
@@ -36,7 +40,9 @@ class HomePage(BasePage):
                         ElevatedButton(text="开启所有线程",
                                        on_click=lambda _: ServiceManager.generalManager.startAllThread()),
                         ElevatedButton(text="获取弹幕",
-                                       on_click=lambda _: DouyinDanmaku().startGetDanmaku()),
+                                       on_click=lambda _: self.douyinDanmaku.startGetDanmakuThread()),
+                        ElevatedButton(text="停止弹幕",
+                                       on_click=lambda _: self.douyinDanmaku.stopGetDanmakuThread()),
                     ]),
 
                     Row([
