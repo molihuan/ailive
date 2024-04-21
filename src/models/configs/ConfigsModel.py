@@ -84,3 +84,7 @@ class ConfigsModel(BaseModel):
     limitIdleTime: int = 60
     idleTextList: List[str] = []
     idleAudioList: List[str] = []
+
+    # 抖音直播间配置
+    # 直播间号
+    douyinLiveRoomNumber: str = "483662997209"

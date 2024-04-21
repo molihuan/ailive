@@ -5,6 +5,7 @@ from flet_core import AppBar, Text, colors, ElevatedButton, ScrollMode, IconButt
 from src.pages.home.HomePage import HomePage
 from src.pages.home.HomePopupMenu import HomePopupMenu
 from src.pages.idle.IdlePage import IdlePage
+from src.pages.live_room.LiveRoomPage import LiveRoomPage
 from src.pages.llm.LLMPage import LLMPage
 from src.pages.route.RouteUrl import RouteUrl
 from src.pages.settings.SettingsPage import SettingsPage
@@ -57,6 +58,17 @@ class AppRoutes():
                     [
                         AppBar(title=Text("设置"), bgcolor=colors.SURFACE_VARIANT),
                         SettingsPage(self.page),
+                    ],
+                    scroll=ScrollMode.AUTO,
+                )
+            )
+        elif self.page.route == RouteUrl.PAGE_LIVE_ROOM:
+            self.page.views.append(
+                View(
+                    RouteUrl.PAGE_LIVE_ROOM,
+                    [
+                        AppBar(title=Text("直播间设置"), bgcolor=colors.SURFACE_VARIANT),
+                        LiveRoomPage(self.page)
                     ],
                     scroll=ScrollMode.AUTO,
                 )

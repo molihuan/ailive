@@ -12,6 +12,11 @@
 pip install -r requirements.txt
 
 python main.py
+
+热更新
+
+
+
 ```
 
 注意:
