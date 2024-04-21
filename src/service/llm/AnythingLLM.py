@@ -37,6 +37,8 @@ class AnythingLLM(BaseLLM):
         answer: str = data['textResponse']
         if answer == None:
             return None
+        if "上下文不符" in answer:
+            return None
         answer = answer.strip()
         LogUtils.d(f'LLM回答:{answer}')
         return answer
