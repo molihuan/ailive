@@ -23,7 +23,7 @@ class AnythingLLM(BaseLLM):
         pass
 
     def ask(self, content: str):
-        content = content + ",用一句简短的话回答我,只能用一句话"
+        content = "你是一个直播带货的主播,产品是皮鞋,客户问:\"" + content + "\",请用一句话尽量简单的回答他"
         LogUtils.d(f'提问:{content}')
         # TODO 进行进行本地问答库回答,获取配置是否需要本地库回答
         response = requests.post(
@@ -35,6 +35,8 @@ class AnythingLLM(BaseLLM):
             })
         data = response.json()
         answer: str = data['textResponse']
+        if answer == None:
+            return None
         answer = answer.strip()
         LogUtils.d(f'LLM回答:{answer}')
         return answer
@@ -45,6 +47,9 @@ class AnythingLLM(BaseLLM):
             askQueueItem: AskQueueItem = askQueue.get()
             # 获取答案
             answerText = self.ask(askQueueItem.text)
+
+            if (answerText == None) or (answerText == ""):
+                continue
 
             # 设置准备生成音频的路径
             temp_audio_name = str(uuid.uuid4()) + '.wav'

@@ -9,7 +9,9 @@ import string
 import requests
 
 from src.plugs.DouyinLiveWebFetcher.protobuf.douyin import *
+from src.service.ServiceManager import ServiceManager
 from src.service.danmaku.BaseDanmaku import BaseDanmaku
+from src.service.llm.BaseLLM import AskQueueItem
 from src.utils.LogUtils import LogUtils
 
 from src.utils.ThreadUtils import SuperThread
@@ -216,7 +218,7 @@ class DouyinLiveWebFetcherDK(BaseDanmaku):
                 pass
 
     def _wsOnError(self, ws, error):
-        LogUtils.e("WebSocket error: ", error)
+        LogUtils.e("WebSocket error: " + error)
         pass
 
     def _wsOnClose(self, ws):
@@ -226,10 +228,14 @@ class DouyinLiveWebFetcherDK(BaseDanmaku):
     def _parseChatMsg(self, payload):
         '''聊天消息'''
         message = ChatMessage().parse(payload)
-        user_name = message.user.nick_name
-        user_id = message.user.id
+        # user_name = message.user.nick_name
+        # user_id = message.user.id
         content = message.content
-        LogUtils.w(f"【聊天msg】[{user_id}]{user_name}: {content}")
+        # LogUtils.w(f"【聊天msg】[{user_id}]{user_name}: {content}")
+
+        ask_queue = ServiceManager.generalManager.askQueue
+        item = AskQueueItem(text=content)
+        ask_queue.put(item)
 
     def _parseGiftMsg(self, payload):
         '''礼物消息'''

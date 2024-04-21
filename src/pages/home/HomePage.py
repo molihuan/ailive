@@ -16,7 +16,7 @@ class HomePage(BasePage):
         self.parent = parent
         self.askTF = Ref[TextField]()
 
-        self.douyinDanmaku: BaseDanmaku = DouyinLiveWebFetcherDK("573356835582")
+        self.douyinDanmaku: BaseDanmaku = DouyinLiveWebFetcherDK("135562384160")
 
     def initData(self):
         pass
