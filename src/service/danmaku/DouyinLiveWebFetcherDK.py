@@ -228,14 +228,14 @@ class DouyinLiveWebFetcherDK(BaseDanmaku):
     def _parseChatMsg(self, payload):
         '''聊天消息'''
         message = ChatMessage().parse(payload)
-        # user_name = message.user.nick_name
-        # user_id = message.user.id
+        user_name = message.user.nick_name
+        user_id = message.user.id
         content = message.content
-        # LogUtils.w(f"【聊天msg】[{user_id}]{user_name}: {content}")
+        LogUtils.w(f"【聊天msg】[{user_id}]{user_name}: {content}")
 
-        ask_queue = ServiceManager.generalManager.askQueue
-        item = AskQueueItem(text=content)
-        ask_queue.put(item)
+        # ask_queue = ServiceManager.generalManager.askQueue
+        # item = AskQueueItem(text=content)
+        # ask_queue.put(item)
 
     def _parseGiftMsg(self, payload):
         '''礼物消息'''
